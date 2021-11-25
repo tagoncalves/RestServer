@@ -6,7 +6,7 @@ const User = require('../models/user');
 //-----------------------------------------------------\\
 const userGet = (req = request, res = response) => {
 
-    const { q, name = 'no name', page = '1' , limit} = req.query;
+    const { q, name , page, limit} = req.query;
 
     res.json({
     msg: 'Get Api - controller',
@@ -16,16 +16,31 @@ const userGet = (req = request, res = response) => {
     limit
     });
 }
-//-----------------------------------------------------\\
-const userPut = (req, res) => {
+//---------------------Put---------------------------\\
+const userPut = async(req, res) => {
+
     const { id } = req.params;
-    
+    const { _id, password, google, email, ...resto } = req.body;
+
+    //TODO: Validar contra base de datos
+
+    if ( password ){
+        // Encriptar la contraseña
+        const salt = bcryptjs.genSaltSync(5);
+        resto.password = bcryptjs.hashSync( password, salt ); 
+    }
+
+    const user = await User.findByIdAndUpdate( id, resto );
+
     res.status(201).json({
         msg: 'Put Api - controller',
-        id
+        user
     });
 }
-//-----------------------------------------------------\\
+
+
+
+//--------------------Post-------------------------------\\
 const userPost = async(req, res) => {
 
     const { name, email, password, role } = req.body;
