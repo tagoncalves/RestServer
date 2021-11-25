@@ -1,79 +1,74 @@
 const { response, request } = require('express');
 const bcryptjs = require('bcryptjs');
 
-const Usuario = require('../models/usuario');
+const User = require('../models/user');
 
 //-----------------------------------------------------\\
-const usuariosGet = (req = request, res = response) => {
+const userGet = (req = request, res = response) => {
 
-    const { q, nombre = 'no name', page = '1' , limit} = req.query;
+    const { q, name = 'no name', page = '1' , limit} = req.query;
 
     res.json({
-    msg: 'Get Api - controlador',
+    msg: 'Get Api - controller',
     q,
-    nombre,
+    name,
     page,
     limit
     });
 }
 //-----------------------------------------------------\\
-const usuariosPut = (req, res) => {
+const userPut = (req, res) => {
     const { id } = req.params;
     
     res.status(201).json({
-        msg: 'Put Api - controlador',
+        msg: 'Put Api - controller',
         id
     });
 }
 //-----------------------------------------------------\\
-const usuariosPost = async(req, res) => {
+const userPost = async(req, res) => {
+
     const { name, email, password, role } = req.body;
-    const usuario = new Usuario({ name, email, password, role });
+    const user = new User({ name, email, password, role });
 
     // Verificar si el correo existe
-    const existeEmail = await Usuario.findOne({email});
-    if (existeEmail){
-        return res.status(400.).json({
-            msg: 'Ese Correo ya esta registrado'
-        });
-    }
 
     // Encriptar la contraseña
     try {
         const salt = bcryptjs.genSaltSync(5);
-        usuario.password = bcryptjs.hashSync( password, salt );
+        user.password = bcryptjs.hashSync( password, salt );
         
     } catch (error) {
         console.log(error);
     }
 
     //Guardar en BD
-    await usuario.save();
+    await user.save();
     
     res.json({
-        usuario
+        user
     });
 }
 //-----------------------------------------------------\\
-const usuariosPatch = (req, res) => {
+const userPatch = (req, res) => {
     res.json({
-        msg: 'Patch Api - controlador'
+        msg: 'Patch Api - controller'
     });
 }
 
 //-----------------------------------------------------\\
-const usuariosDelete = (req, res) => {
+const userDelete = (req, res) => {
     res.json({
-    msg: 'Delete Api - controlador'
+    msg: 'Delete Api - controller'
     });
 }
 
 
 
 module.exports = {
-    usuariosGet,
-    usuariosPut,
-    usuariosPost,
-    usuariosDelete,
-    usuariosPatch
+    userGet,
+    userPut,
+    userPost,
+    userDelete,
+    userPatch
 };
