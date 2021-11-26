@@ -3,14 +3,21 @@ const bcryptjs = require('bcryptjs');
 
 const User = require('../models/user');
 
-//-----------------------------------------------------\\
+//-------------------Get - User - Paginado-----------------------\\ 
 const userGet = async(req = request, res = response) => {
 
-    const users = await User.find();
+    const { limit = 5, from = 0 } = req.query;
+    const query = {status:true};
 
-    res.json(users);
+    const resp = await Promise.all([
+        User.countDocuments(query),
+        User.find(query)
+            .skip(Number( from ))
+            .limit(Number( limit ))
+    ])
+    res.json(resp);
 }
-//---------------------Put---------------------------\\
+//---------------------Actualize User--------------------------\\
 const userPut = async(req, res) => {
 
     const { id } = req.params;
@@ -33,11 +40,11 @@ const userPut = async(req, res) => {
 
 
 
-//--------------------Post-------------------------------\\
+//--------------------Create User---------------------------\\
 const userPost = async(req, res) => {
 
-    const { name, email, password, role } = req.body;
-    const user = new User({ name, email, password, role });
+    const { name, email, password, role, status } = req.body;
+    const user = new User({ name, email, password, role, status });
 
     // Verificar si el correo existe
 

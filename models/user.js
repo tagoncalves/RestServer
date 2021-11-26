@@ -22,7 +22,7 @@ const UserSchema = Schema({
         require: true,
         emun: ['ADMIN_ROLE','USER_ROLE']
     },
-    state:{
+    status:{
         type: Boolean,
         require: true
     },
