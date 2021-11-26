@@ -4,17 +4,11 @@ const bcryptjs = require('bcryptjs');
 const User = require('../models/user');
 
 //-----------------------------------------------------\\
-const userGet = (req = request, res = response) => {
+const userGet = async(req = request, res = response) => {
 
-    const { q, name , page, limit} = req.query;
+    const users = await User.find();
 
-    res.json({
-    msg: 'Get Api - controller',
-    q,
-    name,
-    page,
-    limit
-    });
+    res.json(users);
 }
 //---------------------Put---------------------------\\
 const userPut = async(req, res) => {
@@ -33,7 +27,6 @@ const userPut = async(req, res) => {
     const user = await User.findByIdAndUpdate( id, resto );
 
     res.status(201).json({
-        msg: 'Put Api - controller',
         user
     });
 }
