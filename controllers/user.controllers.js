@@ -6,16 +6,19 @@ const User = require('../models/user');
 //-------------------Get - User - Paginado-----------------------\\ 
 const userGet = async(req = request, res = response) => {
 
-    const { limit = 5, from = 0 } = req.query;
+    // const { limit = 5, from = 0 } = req.query;
     const query = {status:true};
 
-    const resp = await Promise.all([
+    const [ total, usuarios] = await Promise.all([
         User.countDocuments(query),
         User.find(query)
             .skip(Number( from ))
             .limit(Number( limit ))
     ])
-    res.json(resp);
+    res.json({
+        total,
+        usuarios
+    });
 }
 //---------------------Actualize User--------------------------\\
 const userPut = async(req, res) => {
@@ -64,6 +67,25 @@ const userPost = async(req, res) => {
         user
     });
 }
+
+//--------------------User - Delete---------------------------\\
+const userDelete = async(req, res) => {
+
+    const { id } = req.params;
+
+    // Delete Fisicamente
+    // const user = await User.findByIdAndDelete( id );
+
+    //Cambiar estado
+    const user = await User.findByIdAndUpdate( id, {status: false});
+
+    res.json({
+    user
+    });
+    console.log("Usuario Eliminado");
+}
+
+
 //-----------------------------------------------------\\
 const userPatch = (req, res) => {
     res.json({
@@ -71,12 +93,6 @@ const userPatch = (req, res) => {
     });
 }
 
-//-----------------------------------------------------\\
-const userDelete = (req, res) => {
-    res.json({
-    msg: 'Delete Api - controller'
-    });
-}
 
 
 
