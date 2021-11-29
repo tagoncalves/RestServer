@@ -6,7 +6,7 @@ const User = require('../models/user');
 //-------------------Get - User - Paginado-----------------------\\ 
 const userGet = async(req = request, res = response) => {
 
-    // const { limit = 5, from = 0 } = req.query;
+    const { limit = 5, from = 0 } = req.query;
     const query = {status:true};
 
     const [ total, usuarios] = await Promise.all([
@@ -20,6 +20,7 @@ const userGet = async(req = request, res = response) => {
         usuarios
     });
 }
+
 //---------------------Actualize User--------------------------\\
 const userPut = async(req, res) => {
 
@@ -67,6 +68,7 @@ const userPost = async(req, res) => {
         user
     });
 }
+
 
 //--------------------User - Delete---------------------------\\
 const userDelete = async(req, res) => {
