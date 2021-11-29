@@ -1,14 +1,17 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
-const { fieldsValidate } = require('../middlewares/fieldsValidate');
 
+//Importacion de Validaciones
+const { fieldsValidate } = require('../middlewares/fieldsValidate');
+const { isValidRole, isValidEmail, isValidId } = require('../helpers/db-validators');
+
+//Importacion de Funciones
 const { userGet,
     userPut,
     userPost,
     userPatch,
     userDelete } = require('../controllers/user.controllers');
 
-const { isValidRole, isValidEmail, isValidId } = require('../helpers/db-validators');
 const router = Router();
 
 router.get('/', userGet);
@@ -39,3 +42,23 @@ router.patch('/', userPatch);
 
 
 module.exports = router;
+
+
+/**
+ * @api {get} api/users/ Request Users information
+ * @api {put} api/users/:id Request a valid mongoid
+ * @api {post} api/users/ Request User params
+ * @api {delete} api/users/:id Request a valid mongoid
+ * @apiName RestServer
+ * @apiGroup Users
+ *
+ * @apiParam {String} mongoid User's unique ID.
+ * @apiParam {String} last User params to actualize.
+ * @apiParam {String} User params created.
+ * @apiParam {String} last User params to delete.
+ * 
+ *
+ * @apiSuccess {String} firstname Firstname of the User.
+ * @apiSuccess {String} lastname  Lastname of the User.
+ */
+ 
