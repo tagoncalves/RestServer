@@ -1,11 +1,12 @@
 const { Router } = require('express');
 const { check } = require('express-validator');
 
-//Importacion de Validaciones
+//Importar Middlewares
 const { fieldsValidate } = require('../middlewares/fieldsValidate');
+const validateJWT = require('../middlewares/validate-jwt');
 const { isValidRole, isValidEmail, isValidId } = require('../helpers/db-validators');
 
-//Importacion de Funciones
+//Importar Funciones
 const { userGet,
     userPut,
     userPost,
@@ -33,6 +34,7 @@ router.post('/', [
 ], userPost);
 
 router.delete('/:id',[
+    validateJWT,
     check('id','Is not a valid ID').isMongoId(),
     check('id').custom(isValidId),
     fieldsValidate

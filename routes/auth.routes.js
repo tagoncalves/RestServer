@@ -7,8 +7,8 @@ const router = Router();
 
 
 router.post('/login',[
-    check('correo', 'The  email is requested').isEmail(),
-    check('correo', 'The password is requested').not().isEmpty(),
+    check('email', 'The  email is requested').isEmail(),
+    check('password', 'The password is requested').not().isEmpty(),
     fieldsValidate
 ] ,login );
 
